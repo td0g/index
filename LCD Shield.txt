@@ -1,0 +1,36 @@
+//By Tyler Gerritsen
+//2017-11-25
+//vtgerritsen@gmail.com
+
+
+#include <LiquidCrystal.h>
+
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+const byte shieldBacklight = 10;
+
+
+/*
+ analogRead values (A0):
+    nothing = 1023
+    Select = 720
+    Left = 477
+    Down = 305
+    Up = 131
+    Right = 0
+
+    D10 controls backlight
+    
+ */
+
+void setup() {
+  pinMode(shieldBacklight, OUTPUT);
+  digitalWrite(shieldBacklight, HIGH);
+  
+}
+
+void loop() {
+
+}
+
+

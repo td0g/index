@@ -1,0 +1,43 @@
+//By Tyler Gerritsen
+//2017-11-25
+//vtgerritsen@gmail.com
+
+//Serial Commander
+
+/*
+Call getCommand() function regularly. 
+Will return true when a command has been recieved. 
+COMstring will contain the non-numerical string. 
+COMvalue will contain the numerical argument.
+*/
+
+String COMstring;
+unsigned long COMvalue;
+const char terminator = '/';
+
+
+
+boolean getCommand() {
+  static byte i = 0;
+  static char stringChar[20];
+  boolean newCommand = false;
+  COMstring = "";
+  COMvalue = 0;
+  if (Serial.available()) {
+    char COMinput = Serial.read();
+    if (COMinput == terminator) newCommand = true;
+    else if (COMinput > 47) {
+      stringChar[i] = COMinput;
+      i++;
+    }
+    if (newCommand) {
+      for (byte j = 0; j < i; j++) {
+        if (stringChar[j] > 57) COMstring += String(stringChar[j]);
+        else COMvalue = COMvalue * 10 + stringChar[j] - '0';
+        stringChar[j] = 0;
+      }
+      i = 0;
+    }
+  }
+  return newCommand;
+}

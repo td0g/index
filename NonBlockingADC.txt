@@ -1,0 +1,27 @@
+//By Tyler Gerritsen
+//2017-11-25
+//vtgerritsen@gmail.com
+
+//Sources:
+//	ATMega2560 datasheet pp.281 - 288 (http://www.atmel.com/Images/Atmel-2549-8-bit-AVR-Microcontroller-ATmega640-1280-1281-2560-2561_datasheet.pdf)
+//	https://www.gammon.com.au/adc
+
+
+
+ADCSRA =  bit (ADEN);   // turn ADC on
+
+
+	//For ATMega328:
+ADMUX = bit(RES0) | (adcPin & 0x07);	//RES0 sets comparator ref voltage to internal vcc.  For external, 2.56v, 1.1v: See datasheet
+
+	//For ATMega2560:
+ADMUX = bit(REFS0) | (adcPin * 31);		//RES0 sets comparator ref voltage to internal vcc.  For external, 2.56v, 1.1v: See datasheet
+ADCSRB = ((adcPin & 0b00100000) >> 2) + 1;	//The +1 sets to one-shot mode.
+
+//ADCSRA controls ADC state & Prescaler
+
+bitSet(ADCSRA, ADSC);	//Begin conversion
+
+while (!bit_is_clear(ADCSRA, ADSC)) {};		//Wait for conversion
+
+reading = ADC;			//0 - 1023

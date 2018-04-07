@@ -1,0 +1,9 @@
+//By Tyler Gerritsen
+//2017-11-25
+//vtgerritsen@gmail.com
+
+// add this to the top of your sketch
+#define NOP __asm__ __volatile__ ("nop\n\t")
+
+// and then use it in code as follows
+ NOP; // delay 62.5ns on a 16MHz AtMega
