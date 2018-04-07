@@ -1,0 +1,42 @@
+/* td0g.css */
+
+html {background-color: #f4f9ff;}	
+body{max-width: 400px; 
+	margin: auto; 
+	margin-top: 30px; 
+	margin-bottom: 80px;
+	border: grey; 
+	border-width: thick; 
+	border-style: solid; 
+	border-radius: 20px; 
+	padding:45px;
+	background-color: white;
+	}
+h1 {font-family: "impact", charcoal, sans-serif;
+	text-align: center;
+	font-size: 108px;
+	font-color: white;
+	text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 3px 10px #fff, 27px 20px 5px rgba(0, 0, 0, 0.15);
+	margin: 0px;
+	letter-spacing: 5px;
+	}
+h2 {text-align: center;
+	text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5), 3px 2px 10px #fff, 5px 4px 2px rgba(0, 0, 0, 0.05);
+	font-family: "georgia";
+	}
+p {text-align: center;
+	font-family: "georgia";
+	}
+
+p.small {line-height: 90%; 
+	font-size: 6pt;
+	text-align: left;}
+
+hr {display: block; 
+	height: 0px; 
+	border: 0; 
+	border-top: 2px solid #ddd; 
+	border-bottom: 2px solid #ddd; 
+	border-radius: 2px; 
+	margin: 1em 0; 
+	padding: 0;}

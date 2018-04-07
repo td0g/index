@@ -1,0 +1,2 @@
+Run comand prompt as admin
+setx /M PATH "C:\Path\you\want;%PATH%"

@@ -1,0 +1,56 @@
+<html>
+<head>
+<style>
+p {padding-top: 0px;}
+body{ margin-top: 30px; margin-bottom: 80px; margin-left: 180px; margin-right: 180px;  border: grey; border-width: thick; border-style: solid; border-radius: 20px; padding:45px;}
+
+.center {display:block; margin: 0 auto; padding-top: 30px; padding-bottom: 30px}
+
+</style>
+</head>
+
+<title> Tracker v2.1 </title>
+
+<h1 style="text-align: center;"> <font size="36">Astrophotography Mount - <i>Tracker v2.1:</i></font size></h1>
+
+
+<body>
+<font face="Georgia">
+
+<h2 style="text-align: justify;">Preamble:</h2>
+<p style="text-align: justify;">The original <a href="https://gerritsendesign.wordpress.com/2016/02/20/tracker-v2/">Tracker V2</a> was tested using a 250mm lens on a cropped-sensor camera.  It did not produce sharp OR consistent images!  Further examination at the shop revealed that the 10-32 nut and threaded rod caused the arm to advance erratically.  There was no way to eliminate or even mitigate the issue, so a bit of an overhaul was in order.  Enter: Tracker V2.1!</p>
+
+
+<img class="center" src="https://gerritsendesign.files.wordpress.com/2017/01/2016-12-29-andromeda-final-001.jpg" alt="2016-12-29-andromeda-final-001" width="800" title="M31 (Andromeda Galaxy) - imaged using Tracker V2.1"/> <br>
+<h2>Construction:</h2>
+Instead of using the 10-32 nut and rod, I ordered a section of 8mm acme rod from eBay ($12) with an appropriate nut.  I kept the Tracker V2 base and pivot assembly, as well as the controller and motor.  The arm was extended to about 30 cm.  Because of the extra arm length, I probably would have felt comfortable using a straight section of 10-32 rod... However, I wanted to eliminate the possibility of further issues due to the threaded rod.</p>
+
+<img class="center" src="https://gerritsendesign.files.wordpress.com/2017/01/img_17191.jpg" alt="IMG_1719.JPG" width="800" title="The drive retracts the rod"/>
+
+<center>
+<p style="text-align: justify;">The straight rod added quite a bit of complexity to the hardware and software (not to mention it doesn't look nearly as cool).  On the hardware side, the acme rod had to pivot on the end of the arms.  I built the pivots using small 6mm bearings.  The drive nut was press fit into a bearing and a gear was screwed to the top of the nut.  The motor from Tracker V2 was used to turn a worm gear, which drove the nut gear.  The bottom of the acme rod was held into the pivot with a clip and could be removed for storage.</p>
+</center>
+<h2 style="text-align: justify;">Controller Upgrade:</h2>
+<p style="text-align: justify;">The Arduino built-in Math library has trigonometric functions built in.  However, the precision of those calculations using basic triangle formulas wasn't good enough for this application, and I couldn't think of a way to improve them.  So instead of calculating the motor speed on the fly, I used Excel and VBA to create a table for the controller to follow.  The table told the controller when a change in speed was required, which occurred over 1,000 times per full stroke.  Each value was stored as 32-bit integer, so the table required almost 4 kB - much more than the ATTiny85's SRAM could hold.  The solution was to keep the table in the controller's flash memory and retrieve each value as required.  See <a href="http://www.gammon.com.au/progmem">this Gammon forum post</a> for details on how this is done.  The controller's code and spreadsheet I used to build the speed table is in the Github repository (link at bottom).</p>
+
+
+<img class="center" src="https://gerritsendesign.files.wordpress.com/2017/01/img_1729.jpg" alt="img_1729" width="800" title="Ready for storage"/>
+<p style="text-align: justify;">One potential remaining problem was getting an accurate clock to run the controller.  FYI - if you have a 300 mm lens on an 18 MP cropped-sensor camera, and want the stars to move 0.1 pixels on the sensor every 15 seconds, then you need a mount that is 99.9% accurate.  That includes all movement errors that the tracker introduces.  So how accurate is the internal oscillator inside an ATTiny85?</p>
+<p style="text-align: justify;">I tested the clock by running a script which briefly turns on a pin every 300,000 ms (5 minutes), and logged the timing of the pin oscillations with a laptop using a python script.  I tested it inside my office (~20 degrees C) and outside (~-15 degrees C).  The results surprised me - the internal oscillator was only 0.1% fast on average, and temperature had a very small effect.  Contrary to what I expected, the oscillator's speed increased as temperature decreased.  I compensated for the clock's slight inaccuracy by adjusting the controller's speed table.</p>
+
+
+<img class="center" src="https://gerritsendesign.files.wordpress.com/2017/01/attiny-speed-analysis-002.jpg" alt="attiny-speed-analysis-002" width="800" height="612" title="Lots of noise in the clock speed data (due to how the test was conducted), but the effect of temperature is obvious"/>
+
+<img class="center" src="https://gerritsendesign.files.wordpress.com/2017/01/attiny-speed-analysis-001.jpg" alt="attiny-speed-analysis-001" width="800" height="612" title="Only one controller tested... YMMV"/> 
+<h2 style="text-align: justify;">Future improvements (for a possible V3?):</h2>
+<ul>
+	<li style="text-align: justify;">A temperature-compensated crystal to eliminate ALL clock inaccuracies</li>
+	<li style="text-align: justify;">Exchange the stupid 3-way head for a proper ball head</li>
+	<li style="text-align: justify;">Instead of having the head come off the side of the pivot shaft, it would seem to make more sense if it came off the front (and move the pivot arm to the rear).  This would make the entire assembly more balanced, and would be easier to construct.</li>
+	<li style="text-align: justify;">Replace the LM298N for a proper stepper motor driver with partial step increments.  This would mitigate the small vibration caused by the motor each time it steps.</li>
+</ul>
+<h2>Data:</h2>
+<a href="https://drive.google.com/drive/folders/0B77In5CthYnSa1lkakQ2a1JYeXc?usp=sharing">https://drive.google.com/drive/folders/0B77In5CthYnSa1lkakQ2a1JYeXc?usp=sharing</a> (Update in progress...)
+
+</body>
+</html>

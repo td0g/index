@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" type="text/css" href="td0g.css" media="screen" />
+
+<html>
+<head><title> td0g.ca </title></head>
+
+<style>
+body{max-width: 400px; margin: auto; margin-top: 30px; margin-bottom: 80px;  border: grey; border-width: thick; border-style: solid; border-radius: 20px; padding:45px;}
+.center {display:block; margin: 0 auto}
+</style>
+
+<body>
+<h1>td0g.ca</h1>
+<p style="text-align: center" title="Douglas Adams"> <font face="Comic Sans MS"><font size="2"><i>always know where your towel is</i></font size></p>
+
+<h2>External Info:</h2>
+<p><b><a href="https://cdn.sparkfun.com/assets/learn_tutorials/4/0/3/4A-ESP8266__AT_Instruction_Set__EN_v0.30.pdf">Datasheet</a> </b> </p>
+<p><b><a href="https://www.itead.cc/wiki/ESP8266_Serial_WIFI_Module">AT Command Wiki</a> </b> </p>
+<p><b><a href="https://acrobotic.com/media/wysiwyg/products/esp8266_esp01_horizontal-01.png">ESP-01 Pinout</a> </b> </p>
+
+<p><b>Modules:</b>
+<br>ESP-01
+</p>
+<hr />
+<h2>Interfacing With AVR using Software Serial library:</h2>
+<p>Problem: software serial library does not recieve data well at baud rates above 9600.
+<br>The following procedure can be used to change the baud rate on each boot to a more suitable rate for software serial.
+<br>
+<br>1 - Connect with 115200 baud
+<br>2 - Send "AT+UART_CUR=9600,8,1,0,0\r\n"
+<br>3 - Wait for "OK" response
+<br>4 - Change baud to 9600
+<br>5 - Wait some time (500ms?)
+<br>6 - Do not reset module as it will revert to defualt baud rate!
+<br>
+<br>Once a reliable system has been established, change the default baud rate
+<br>Send "AT+UART_DEF=9600,8,1,0,0\r\n"
+</p>
+<hr />
+
+
+
+</body>
+</html>

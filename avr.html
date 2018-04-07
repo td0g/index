@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" type="text/css" href="td0g.css" media="screen" />
+
+<html>
+
+<head><title> td0g.ca </title></head>
+
+<style>
+body{max-width: 400px; margin: auto; margin-top: 30px; margin-bottom: 80px;  border: grey; border-width: thick; border-style: solid; border-radius: 20px; padding:45px;}
+.center {display:block; margin: 0 auto}
+</style>
+
+<body>
+<h1>td0g.ca</h1>
+<p style="text-align: center" title="Douglas Adams"> <font face="Comic Sans MS"><font size="2"><i>always know where your towel is</i></font size></p>
+
+
+<h2>Basic Coding Notes:</h2>
+<p><b>Array Syntax:</b></p>
+<p><i>myArray[][3] = {{1, 2, 3},
+<br>&emsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {4, 5, 6}};</i></p>
+<p><b>Bit Shifting - Basic Syntax:</b> <i>16 << 2 = 64</i></p>
+<p><b>Bit Shifting - Shifting Right & Sign Extension:</b></p>
+<p><i>int x = -16;     // binary: 1111111111110000</i></p>
+<p><i>int y = x >> 3;  // binary: 1111111111111110</i></p>
+<hr />
+<p><b>Bit Math </b>
+<br>& | ! ^ (And, Or, Not, Xor)
+<br>Bit Masking (&):
+<br>byte x = 5 = 0b00000101
+<br>byte y = x & 0b00000011 = 0b00000001
+<br>Turning Bit On (|):
+byte x = 5 = 0b00000101
+byte x = x | 0b00000011 = 0b00000111
+</p>
+<hr />
+<h2>Advanced Coding Topics:</h2>
+<p><b>Direct Port Register Manipulation </b><a href="https://hekilledmywire.wordpress.com/2011/02/23/direct-port-manipulation-using-the-digital-ports-tutorial-part-3/">-Guide-</a> </p>
+<p><b>Timer Registers </b><a href="https://arduino-info.wikispaces.com/Timers-Arduino?responseToken=01161f44b9042b7ed4b7a9f8b4afa3a33">-Guide-</a> | <a href="http://playground.arduino.cc/Main/TimerPWMCheatsheet">-Cheat Sheet-</a> </p>
+<p><b>Pinouts </b><a href="http://jobs.arduinoexperts.com/wp-content/uploads/2013/03/atmega328w.png">-ATMega328-</a> | <a href="http://orig06.deviantart.net/82c9/f/2013/038/3/7/attiny_web_by_pighixxx-d5u4aur.png">-ATTiny85-</a> </p>
+<p><b><a href="https://www.arduino.cc/en/Reference">Arduino Reference Page</a> </b> </p>
+
+<hr />
+<h2>Timers:</h2>
+
+<p>ATMega328:</p>
+<table style="width:100%;font-size:8pt;font-family:georgia">
+<tr><th>Timer</th><th>Size</th><th>Base frequency</th><th>Affected functions</th></tr>
+<tr><th>0</th><th>8-bit</th><th>62500</th><th>millis, micros, delay</th></tr>
+<tr><th>1</th><th>16-bit</th><th>31372.55</th><th>Servo library</th></tr>
+<tr><th>2</th><th>8-bit</th><th>62500</th><th>Tone</th></tr></table>
+
+<p>ATTiny85:</p>
+<table style="width:100%;font-size:8pt;font-family:georgia"><tr><th>Timer</th><th>Size</th><th>Affected Functions</th></tr>
+<tr><th>0</th></tr></table>
+
+<p>Configuring Timers:<br></p>
+<table style="width:100%;font-size:8pt;font-family:georgia;border: 1px solid black;">
+<tr><th>Bit</th><th>8</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th></tr>
+<tr><th>TCCRxA</th><th>COM, 1A1, RW</th><th>COM, 1A0, RW</th><th>COM, 1B1, RW</th><th>COM, 1B0, RW</th><th>R</th><th> </th><th>WG, M11, RW</th><th>WG, A10, RW</th></tr>
+<tr><th>TCCRxB</th><th>1CNC 1 RW </th><th> 1CES, 1, RW</th><th>R</th><th>WG, M13, RW</th><th>WG, M12, RW</th><th>CS12, RW</th><th>CS11, RW</th><th>CS10, RW</th></tr>
+</table>
+<p>
+<br>
+<br>For PWM freq adjustment, set timer's base frequency divided by prescaler.
+</p>
+<table style="width:100%;font-size:8pt;font-family:georgia">
+<tr><th>CS12</th><th>CS11</th><th>CS10</th><th>Prescaler</th></tr>
+<tr><th>0</th><th>0</th><th>0</th><th>No Clock (default)</th></tr>
+<tr><th>0</th><th>0</th><th>1</th><th> /1 (fastest)</th></tr>
+<tr><th>0</th><th>1</th><th>0</th><th>/8</th></tr>
+<tr><th>0</th><th>1</th><th>1</th><th>/64</th></tr>
+<tr><th>1</th><th>0</th><th>0</th><th>/256</th></tr>
+<tr><th>1</th><th>0</th><th>1</th><th>/1024 (slowest)</th></tr>
+<tr><th>1</th><th>1</th><th>0</th><th>Ext clock T1 pin - falling</th></tr>
+<tr><th>1</th><th>1</th><th>1</th><th>Ext clock T1 pin - rising</th></tr>
+</table>
+<p>
+Initializing timers:<br>
+cli;<br>
+TCCRxA = 0;<br>
+TCCRxB = 0;<br>
+TIMSKx |= 1<<TOIG);<br>
+TCCRxB |= ________;<br>
+TCNT1 = startTime;<br>
+sei();<br>
+</p>
+<hr />
+<h2>Programming:</h2>
+<p><b>Board Manager URL's (separated by comma):  </b>
+<p>ATTiny: https://raw.githubusercontent.com/damellis/attiny/ide-1.6.x-boards-manager/package_damellis_attiny_index.json
+<p>ESP8266: http://arduino.esp8266.com/stable/package_esp8266com_index.json
+
+<p><b>Arduino as ISP --> ATMega328:  </b><a href="http://www.homautomation.org/2014/03/06/running-atmega328-in-a-standalone-mode-without-arduino-shield/">homeautomation.org</a></p>
+<img  width="400" src="https://voidyourwarranty.files.wordpress.com/2014/08/standalone-328-with-arduinoisp-v1-clipped.png" title="https://voidyourwarranty.files.wordpress.com"/>
+
+<p><b>Programming Bootloaded ATMega328 w/ FTDI:  </b><a href="http://www.gammon.com.au/breadboard">gammon.com.au</a></p>
+<p><b>NOTES:</b> <i>Both Lilypad and Uno bootloaders are confirmed to work.</p>
+<p>Adafruit FTDI cable has 5V supply and 3V logic - One or the other MUST be shifted. </p>
+<p>Programmer: Select AVRISP mkII | Board: Lilypad Arduino or Arduino Uno</p>
+<p>When changing from internal to external oscillator bootloader, don't forget to add the external oscillator.</p></i>
+
+
+
+
+
+
+</body>
+</html>
