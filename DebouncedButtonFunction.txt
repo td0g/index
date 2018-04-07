@@ -1,0 +1,41 @@
+//By Tyler Gerritsen
+//2017-07-09
+//vtgerritsen@gmail.com
+
+/*
+Handles reading and debouncing button input
+Returns a 1 for short hold and a 2 for long hold
+*/
+
+#define BUTTON_DEBOUNCE
+#define BUTTON_LONGHOLD
+
+
+uint8_t readBtn(){  //Return 1 if short pressed & released, Return 2 if long pressed PRIOR to release
+  static unsigned long debounceTimer;
+  static unsigned int buttonRead;
+  static byte buttonPos;
+  
+  buttonRead = digitalRead(0);	//For pullup input
+  //buttonRead = 1 - digitalRead(0);	//For pulldown
+  
+  if (buttonRead && millis() > debounceTimer){   //Button depressed
+    if (!buttonPos){
+      buttonPos = 1;
+      debounceTimer = millis() + BUTTON_LONGHOLD;
+    }
+    else if (buttonPos == 1){
+      buttonPos = 2;
+      return 2;
+    }
+  }
+  else if (buttonPos && !buttonRead) {
+    debounceTimer = millis() + BUTTON_DEBOUNCE;
+    if (buttonPos == 1) {
+      buttonPos = 0;
+      return 1;
+    }
+    buttonPos = 0;
+  }
+  return 0;
+}

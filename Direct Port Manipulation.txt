@@ -1,0 +1,11 @@
+//By Tyler Gerritsen
+//2017-11-25
+//vtgerritsen@gmail.com
+
+DDRD = 0b11110000; #ATMega Pins 0123 = input, 4567 = output 
+PORTD = 0b11111111;	#ATMega Pins 0123567 = HIGH 
+DDRD = (1<<PD2);	#Pin 2 of Port D (ATMega Pin 1) is output 
+PORTD = (1<<PD2);	#Pin 2 of Port D is HIGH 
+byte readPins = PIND;	#Reads ATMega Pins 01234567 
+readPins = (PIND & (1<<PD1));	#Read Pin 1 of Port D (ATMega Pin 0) into variable 
+if(PIND & ((1<<PD0) | (1<<PD1))){foo}	#If Port D pins 0 AND 1 are high

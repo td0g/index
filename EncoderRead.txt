@@ -1,0 +1,30 @@
+
+#define ENCODER_INPUT PINB >> 3
+#define ENCODER_HIGHSPEED 50
+#define invertWheel 0
+
+int8_t readEncoder(){
+  static int8_t pos;
+  static int8_t dir = 1;
+  static uint32_t lastPulse;
+  static const uint8_t inputIndex[4] = {2, 1, 3, 0};
+  
+  uint8_t input = (ENCODER_INPUT);
+  input = inputIndex[input];
+
+  if (input != pos){
+    if (millis() - lastPulse > ENCODER_HIGHSPEED){               //Not Hi speed?
+      if (pos == (input + 1) % 4) dir = -1;
+      else if ((pos + 1) % 4 == input) dir = 1;
+    }
+    lastPulse = millis();
+    while (input != pos){
+      pos += dir;
+      if (pos == -1) pos = 3;
+      else if (pos == 4) pos = 0;
+      else if (pos == 2 && dir == -1){ if (invertWheel) return 1; else return -1;}
+      else if (pos == 3 && dir == 1){ if (invertWheel) return -1; else return 1;}
+    }
+  }
+  return 0;
+}
