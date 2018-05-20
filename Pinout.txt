@@ -1,0 +1,41 @@
+ATTiny85
+
+rst    -u-   vcc
+3 A3  |   |  2 A1
+4 A2  |   |  1 PWM
+gnd    ---   0 PWM
+
+
+
+ATMega328
+
+rst    -u-   19 PC5 A
+rx    |   |  18 PC4 A
+tx    |   |  17 PC3 A
+2 PD2 |   |  16 PC2 A
+3 PD3 |   |  15 PC1 A
+4 PD4 |   |  14 PC0 A
+vcc   |   |  gnd
+gnd   |   |  aref
+osc1  |   |  vcc
+osc2  |   |  13 PB5
+5 PD5 |   |  12 PB4
+6 PD6 |   |  11 PB3
+7 PD7 |   |  10 PB2
+8 PB0  ---   9 PB1
+
+
+
+TIP120
+
+|-|---| Emitter         /C
+|O|   | Collector     B|
+|-|---| Base            \E
+
+
+
+78xx Linear Regulator
+
+|-|---| Output
+|O|   | Ground
+|-|---| Input
