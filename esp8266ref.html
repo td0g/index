@@ -23,6 +23,8 @@ body{max-width: 400px; margin: auto; margin-top: 30px; margin-bottom: 80px;  bor
 <br>ESP-01
 </p>
 <hr />
+  
+  
 <h2>Interfacing With AVR using Software Serial library:</h2>
 <p>Problem: software serial library does not recieve data well at baud rates above 9600.
 <br>The following procedure can be used to change the baud rate on each boot to a more suitable rate for software serial.
@@ -39,7 +41,14 @@ body{max-width: 400px; margin: auto; margin-top: 30px; margin-bottom: 80px;  bor
 </p>
 <hr />
 
-
+  
+  
+<h2>Using I2C:</h2>
+<br>It doesn't appear to matter which pins to use for I2C.
+<br>Include the Wire library and initiate using the Wire.begin(SDA, SCL) method.
+<br>Use Digital Pin syntax for the method.
+<br>eg.: Wire.begin(D1, D2);
+  
 
 </body>
 </html>
