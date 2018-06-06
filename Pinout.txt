@@ -1,36 +1,44 @@
 ATTiny85
 
-rst    -u-   vcc
-3 A3  |   |  2 A1
-4 A2  |   |  1 PWM
-gnd    ---   0 PWM
+   PB5 ADC0 rst   -u-   vcc
+PB3 ADC3 0C1B 3  |   |  2 ADC1 PB2 SCK SCL
+PB4 ADC2 0C1B 4  |   |  1 PWM PB1 MISO 0C0B 0C1A
+            gnd   ---   0 PWM PB0 MOSI SDA 0C0A 0C1A
 
 
 
 ATMega328
 
-rst    -u-   19 PC5 A
-rx    |   |  18 PC4 A
-tx    |   |  17 PC3 A
-2 PD2 |   |  16 PC2 A
-3 PD3 |   |  15 PC1 A
-4 PD4 |   |  14 PC0 A
-vcc   |   |  gnd
-gnd   |   |  aref
-osc1  |   |  vcc
-osc2  |   |  13 PB5
-5 PD5 |   |  12 PB4
-6 PD6 |   |  11 PB3
-7 PD7 |   |  10 PB2
-8 PB0  ---   9 PB1
+   rst   22  -u-   19 PC5 ADC5 SCL
+   rx    0  |   |  18 PC4 ADC4 SDA
+   tx    1  |   |  17 PC3 ADC3
+   PD2   2  |   |  16 PC2 ADC2
+0C2B PD3 3  |   |  15 PC1 ADC1
+   PD4   4  |   |  14 PC0 ADC0
+       vcc  |   |  gnd
+       gnd  |   |  aref
+      osc1  |   |  vcc
+      osc2  |   |  13 PB5 SCK
+0C0B PD5 5  |   |  12 PB4 MISO
+0C0A PD6 6  |   |  11 PB3 MOSI 0C2A
+   PD7   7  |   |  10 PB2 SS 0C1B
+   PB0   8   ---   9 PB1 0C1A
 
 
 
 TIP120
 
-|-|---| Emitter         /C
+|-|---| Emitter         /C +
 |O|   | Collector     B|
-|-|---| Base            \E
+|-|---| Base            \E -
+
+
+
+N-Channel MOSFET
+
+|-|---| Source          /D +
+|O|   | Drain         G|
+|-|---| Gate            \S -
 
 
 
@@ -39,3 +47,17 @@ TIP120
 |-|---| Output
 |O|   | Ground
 |-|---| Input
+
+
+
+ULN2001 Darlington Array
+500mA/driver  50V
+
+in1   -u-   out1
+in2  |   |  out2
+in3  |   |  out3
+in4  |   |  out4
+in5  |   |  out5
+in6  |   |  out6
+in7  |   |  out7
+gnd   ---   free_wheeling_diode (connect to vcc)
