@@ -53,11 +53,20 @@ N-Channel MOSFET
 
 
 
-78xx Linear Regulator
+LM78xx Linear Regulator
 
 |-|---| Output
 |O|   | Ground
 |-|---| Input
+
+
+
+LM1117 Linear 3.3v Regulator
+VinMAX = 20v (15v recommended), 1200 mA
+
+|-|---| Input
+|O|   | Output
+|-|---| Ground
 
 
 
