@@ -23,6 +23,17 @@ ATMega328
 0C0A PD6 6  |   |  11 PB3 MOSI 0C2A
    PD7   7  |   |  10 PB2 SS 0C1B
    PB0   8   ---   9 PB1 0C1A
+   
+   
+  
+ESP8266-01
+3.3v
+      ---------------------
+      |        RX/GPIO3   VCC
+      |           GPIO0   RST
+      |           GPIO2   CHIP_EN/CH_PD
+      |             GND   TX/GPIO2
+      ---------------------
 
 
 
