@@ -27,7 +27,7 @@ ATMega328
    
   
 ESP8266-01
-3.3v
+2.5v - 3.6v, 12mA/pin
       ---------------------
       |        RX/GPIO3   VCC
       |           GPIO0   RST
@@ -81,3 +81,16 @@ in5  |   |  out5
 in6  |   |  out6
 in7  |   |  out7
 gnd   ---   free_wheeling_diode (connect to vcc)
+
+
+
+LED Polarity
+     __
+  |> > |
+  |  | |
+  |  |_|
+  
+  |    |
+  |    |
+  |
++        -
