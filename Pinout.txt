@@ -1,3 +1,20 @@
+Resistor Colour Code
+
+Black   0  1
+Brown   1  10
+Red     2  100
+Orange  3  1k
+Yellow  4  10k
+Green   5  100k
+Blue    6  1M
+Violet  7  10M
+Grey    8  100M
+White   9  1G
+Gold
+Silver
+
+
+
 ATTiny85
 
    PB5 ADC0 rst   -u-   vcc
