@@ -2,7 +2,7 @@
 
 html {background-color: #f4f9ff;}	
 body{max-width: 400px; <!-- Width of Box -->
-	min-width: 300px;
+	min-width: 350px;
 	margin: auto; 
 	margin-top: 30px; <!-- Distance top of screen to box -->
 	margin-bottom: 80px;
