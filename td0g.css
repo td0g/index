@@ -2,9 +2,9 @@
 
 html {background-color: #f4f9ff;}	
 body{max-width: 400px; <!-- Width of Box -->
-	margin: auto;
 	margin-top: 30px; <!-- Distance top of screen to box -->
 	margin-bottom: 80px;
+	margin: auto;
 	border: grey; 
 	border-width: thick; 
 	border-style: solid; 
