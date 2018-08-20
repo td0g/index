@@ -1,8 +1,7 @@
 /* td0g.css */
 
 html {background-color: #f4f9ff;}	
-body{max-width: 400px; <!-- Width of Box -->
-	min-width:399px;
+body{width: 525px; <!-- Width of Box -->
 	margin-top: 30px; <!-- Distance top of screen to box -->
 	margin-bottom: 80px;
 	margin: auto;
