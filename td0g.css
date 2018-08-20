@@ -15,8 +15,10 @@ body{max-width: 400px; <!-- Width of Box -->
 	}
  
 @media only screen and (max-device-width: 400px) {
-	margin-left: 10px; 
-	margin-right: 10px; 
+	body{
+		margin-left: 10px; 
+		margin-right: 10px; 
+	}
 	}
 h1 {font-family: "Bookman", charcoal, sans-serif;
 	text-align: center;
