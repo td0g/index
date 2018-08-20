@@ -15,6 +15,7 @@ body{max-width: 400px; <!-- Width of Box -->
  
 @media only screen and (max-device-width: 400px) {
 	body{
+	margin-top: 30px; <!-- Distance top of screen to box -->
 		margin-left: 10px; 
 		margin-right: 10px; 
 	}
