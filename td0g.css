@@ -3,11 +3,7 @@
 html {background-color: #f4f9ff;}	
 body{max-width: 400px; <!-- Width of Box -->
 	min-width: 350px;
-	margin: auto; 
-	@media only screen and (max-device-width: 400px) {
-	margin-left: 10px; 
-	margin-right: 10px; 
-	}
+	margin: auto;
 	margin-top: 30px; <!-- Distance top of screen to box -->
 	margin-bottom: 80px;
 	border: grey; 
@@ -16,6 +12,11 @@ body{max-width: 400px; <!-- Width of Box -->
 	border-radius: 20px; 
 	padding:45px;
 	background-color: white;
+	}
+ 
+@media only screen and (max-device-width: 400px) {
+	margin-left: 10px; 
+	margin-right: 10px; 
 	}
 h1 {font-family: "Bookman", charcoal, sans-serif;
 	text-align: center;
