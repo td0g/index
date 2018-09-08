@@ -1,0 +1,151 @@
+/*
+ * Written by Tyler Gerritsen
+ * vtgerritsen@gmail.com
+ * 2017-10-20
+ * 
+ * Thanks to https://www.marginallyclever.com/2013/08/how-to-build-an-2-axis-arduino-cnc-gcode-interpreter/
+ * 
+ * Serial buffer size increase:  Thanks to https://internetofhomethings.com/homethings/?p=927
+ */
+/*
+
+
+#define MAX_BUF 64 // What is the longest message Arduino can store?
+#define CHAR_BUF 128
+
+char serialBuffer[MAX_BUF];
+int sofar;
+byte left;
+
+
+
+char getSerial(byte returnChar){      //Saves incoming Serial Data to a big buffer
+  static byte writePos;
+  static byte readPos = CHAR_BUF - 1;
+  static char charBuffer[CHAR_BUF];
+
+  if (returnChar == 2){
+    for (byte i = 0; i < CHAR_BUF; i++){
+      charBuffer[i] = 0;
+    }
+    writePos = 0;
+    readPos = CHAR_BUF - 1;
+    while (Serial.available()) Serial.read();
+    delay(100);
+    while (Serial.available()) Serial.read();
+    return 0;
+  }
+  
+  if (Serial.available() && writePos != readPos){
+    charBuffer[writePos] = Serial.read();
+    writePos++;
+    writePos %= CHAR_BUF;
+  }
+  if (returnChar && charBuffer[(readPos + 1 % CHAR_BUF)] != 0){
+    readPos++;
+    readPos %= CHAR_BUF;
+    char temp = charBuffer[readPos];
+    charBuffer[readPos] = 0;
+    return temp;
+  }
+  return 0;
+}
+
+
+
+void getCommand(){
+  static byte crc;
+  static byte doingSomething;
+  static byte crcEnd = 0;
+  static byte crcGood = 0;
+  static unsigned long lineNumber = 0;
+  switch (doingSomething){
+    case 0:
+      char c;
+      c = getSerial(1);
+      //if (DEBUG) Serial.print(c);
+      if(c == '\n') {
+        lineNumber++;
+        doingSomething = 1;
+      }
+      else if(c != 0 && sofar < MAX_BUF) {
+        serialBuffer[sofar++]=c;
+        if (c == 42) crcEnd = 1;
+        if (!crcEnd) crc ^= c;
+      }
+    break;
+    case 1:
+        int printedCRC;
+        printedCRC = parseNumber(42,-1);
+        if (crc == printedCRC|| printedCRC == -1){
+          processCommand();
+          doingSomething = 2;
+          crc = 0;
+          crcEnd = 0;
+          for (byte i= 0; i < sofar; i++) Serial.print(serialBuffer[i]);
+          Serial.println();
+          Serial.println("ok");
+        }
+        else {
+          Serial.print("N");
+          Serial.print(lineNumber);
+          Serial.print(" Expected Checksum ");
+          Serial.println(crc);
+          lineNumber--;
+          getSerial(2);
+        }
+    break;
+    case 2:
+      if (!motor.run() && millis() > dwellTimer){
+        doingSomething = 0;
+        sofar=0; // clear input buffer
+        left = 0;
+      }
+    break;
+  }
+}
+
+
+
+void processCommand() {
+  static float feedLast[2] = {FEEDRATE_DEFAULT,FEEDRATE_DEFAULT};
+  int cmd=parseNumber('G',-1);
+  switch(cmd) {
+    case 0: case 1: // move in a line
+      if ((menuPosition >> 6) == 1) {
+        feedLast[cmd] = parseNumber('F',feedLast[cmd]);
+        if (posABS) motor.lineAbs(parseNumber('X', motor.getMM(0)), parseNumber('Y', motor.getMM(1)),parseNumber('Z', motor.getMM(2)), feedLast[cmd]);
+        else motor.lineAbs(parseNumber('X', 0) + motor.getMM(0), parseNumber('Y', 0) + motor.getMM(1),parseNumber('Z', 0) + motor.getMM(2) , feedLast[cmd]);
+      }
+      break;
+    case 4: dwellTimer = millis() + parseNumber('P',0) * 1000; break; // wait a while
+    case 28: if ((menuPosition >> 6) == 1) {if (parseNumber('X', -1)!= -1) motor.lineAbs(200 + motor.getMM(0),motor.getMM(1),motor.getMM(2));} break;
+    case 29: if ((menuPosition >> 6) == 1) zProbe(parseNumber('Z', 1.2));  break;
+    case 90: posABS=1; left += 4; processCommand(); break; // absolute mode
+    case 91: posABS=0; left += 4; processCommand();  break; // relative mode
+    case 92: motor.setMM(parseNumber('X', motor.getMM(0)), parseNumber('Y', motor.getMM(1)), parseNumber('Z', motor.getMM(2))); break;
+    default: break;
+  }
+
+  cmd=parseNumber('M',-1);
+  switch(cmd) {
+    case 3: if ((menuPosition >> 6) == 1) tool(1); break;
+    case 5: if ((menuPosition >> 6) == 1) tool(0); break;
+    case 18: break; // turns off power to steppers (releases the grip)
+    case 119: Serial.print("X: "); Serial.print((endstopState) & 1); Serial.print(" Y: "); Serial.print((endstopState>>1) & 1); Serial.print(" Z: "); Serial.println((endstopState >> 2) & 1);
+    default: break;
+  }
+}
+
+
+
+float parseNumber(char code,float val) {
+  char *ptr=serialBuffer + left;  // start at the beginning of buffer
+  while((long)ptr > 1 && (*ptr) && (long)ptr < (long)serialBuffer+sofar) {  // walk to the end
+    if(*ptr==code) {  // if you find code on your walk,
+      return atof(ptr+1);  // convert the digits that follow into a float and return it
+    }
+    ptr++;  // take a step from here to the letter after the next space
+  }
+  return val;  // end reached, nothing found, return default val.
+}
