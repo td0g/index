@@ -1,0 +1,49 @@
+exampleLibrary.h:
+
+#ifndef __exampleLibrary__
+#define __exampleLibrary__
+
+#include <inttypes.h>
+
+class IRENEmath {
+
+public:
+    //Constructor
+  exampleLibrary(uint16_t _a);
+  float times2(float _x = 0);
+  float times4(float _y = 0);
+//protected:
+private:
+  uint16_t A;
+};
+
+#endif
+
+
+
+
+
+
+
+
+
+
+exampleLibrary.cpp:
+
+#include "exampleLibrary.h"  //also write this in the sketch
+#include <Arduino.h>
+
+exampleLibrary::exampleLibrary(uint16_t _a, uint16_t _b, uint16_t _c){
+ A = _a;
+}
+
+float exampleLibrary::times2(float _x){
+  _x *= 2;
+  return _x;
+}
+
+float exampleLibrary::times4( float _y){
+  _y = times2(_y);
+  _y = times2(_y);
+  return _y;
+}
