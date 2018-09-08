@@ -12,7 +12,8 @@ ADCSRA =  bit (ADEN);   // turn ADC on
 
 
 	//For ATMega328:
-ADMUX = bit(RES0) | (adcPin & 0x07);	//RES0 sets comparator ref voltage to internal vcc.  For external, 2.56v, 1.1v: See datasheet
+ADMUX = bit (REFS0) | (adcPin & 31);	//RES0 sets comparator ref voltage to internal vcc.  For external, 2.56v, 1.1v: See datasheet
+ADCSRB = ((adcPin & 0b00100000) >> 2) + 1;
 
 	//For ATMega2560:
 ADMUX = bit(REFS0) | (adcPin * 31);		//RES0 sets comparator ref voltage to internal vcc.  For external, 2.56v, 1.1v: See datasheet
