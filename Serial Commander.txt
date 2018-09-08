@@ -2,6 +2,8 @@
 //2017-11-25
 //vtgerritsen@gmail.com
 
+//2018-09-08 Added negative number recognition
+
 //Serial Commander
 
 /*
@@ -12,7 +14,7 @@ COMvalue will contain the numerical argument.
 */
 
 String COMstring;
-unsigned long COMvalue;
+long COMvalue;
 const char terminator = '/';
 
 
@@ -26,17 +28,21 @@ boolean getCommand() {
   if (Serial.available()) {
     char COMinput = Serial.read();
     if (COMinput == terminator) newCommand = true;
-    else if (COMinput > 47) {
+    else if (COMinput > 47 || COMinput == 45) {
       stringChar[i] = COMinput;
       i++;
     }
     if (newCommand) {
+      byte neg = 0;
+      COMvalue = 0;
       for (byte j = 0; j < i; j++) {
-        if (stringChar[j] > 57) COMstring += String(stringChar[j]);
+        if (!COMvalue && stringChar[j] == '-') neg = 1;
+        else if (stringChar[j] > 57) COMstring += String(stringChar[j]);
         else COMvalue = COMvalue * 10 + stringChar[j] - '0';
         stringChar[j] = 0;
       }
       i = 0;
+      if (neg) COMvalue *= -1;
     }
   }
   return newCommand;
