@@ -24,6 +24,7 @@ body{max-width: 400px; margin: auto; margin-top: 30px; margin-bottom: 80px;  bor
 <p><b>Bit Shifting - Shifting Right & Sign Extension:</b></p>
 <p><i>int x = -16;     // binary: 1111111111110000</i></p>
 <p><i>int y = x >> 3;  // binary: 1111111111111110</i></p>
+  
 <hr />
 <p><b>Bit Math </b>
 <br>& | ! ^ (And, Or, Not, Xor)
@@ -31,9 +32,21 @@ body{max-width: 400px; margin: auto; margin-top: 30px; margin-bottom: 80px;  bor
 <br>byte x = 5 = 0b00000101
 <br>byte y = x & 0b00000011 = 0b00000001
 <br>Turning Bit On (|):
-byte x = 5 = 0b00000101
-byte x = x | 0b00000011 = 0b00000111
+<br>byte x = 5 = 0b00000101
+<br>byte x = x | 0b00000011 = 0b00000111
 </p>
+  
+  <hr />
+<p><b>Data Types</b>
+<br>All literals (constants) are assumed to be signed integers:
+<br>  1. if entered without a decimal (1.0 is a float)
+<br>  2. if not explicitly specified (1UL is an unsigned long)
+<br>If the math performed involves a float, then floating-point math will be performed.
+<br>Otherwise math is performed in the domain of the first rside OPERATION (see operation precidence).
+  <br> See <a href="https://www.baldengineer.com/arduino-math-fixes.html">The Bald Engineer</a></p>
+<br> And see <a href="https://en.cppreference.com/w/c/language/operator_precedence">C Operator Precidence</a></p>
+</p>
+  
 <hr />
 <h2>Advanced Coding Topics:</h2>
 <p><b>Direct Port Register Manipulation </b><a href="https://hekilledmywire.wordpress.com/2011/02/23/direct-port-manipulation-using-the-digital-ports-tutorial-part-3/">-Guide-</a> </p>
