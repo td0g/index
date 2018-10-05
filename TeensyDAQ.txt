@@ -1,0 +1,102 @@
+/*
+Macro for recording data to uSD using Teensy 3.5 / 3.6 uController
+Written by Tyler Gerritsen
+2018-10-05
+vtgerritsen@gmail.com
+
+Prerequisites:
+  SDFat - https://github.com/greiman/SdFat
+  Arduino 1.8.7
+  
+Call sdCard regularly from Loop()
+Nothing to initialize in Setup()
+Public var cardInserted is true when SD card is available and otherwise fales
+  This is performed by creating the "null" file and checking for it regularly
+Public var cardRecording should be set outside this macro
+  On setting true, it will be returned to false if SD is not available
+  Otherwise it will create a new file with a suffix number (000 - 999)
+  Keep in mind that flushing requires several milliseconds - Consider running an interrupt to capture data to a buffer
+
+ */
+
+
+//Definitions
+  #include "SdFat.h"
+  #define CARD_DATA_FILE_NAME "DATA"    //MUST be 8.3 compatible
+  #define CARD_FLUSH_INTERVAL 500       //Comment out if flushing should happen elsewhere
+  #define CARD_CHECK_INTERVAL 500
+  SdFatSdioEX card;
+  File cardDataFile;
+  File cardNullFile;
+  boolean cardInserted = false;
+  boolean cardRecording = false;
+
+
+//Function
+void sdCard(){
+  static uint8_t _cardDataFileOpen = false;
+  static uint32_t _timer;
+  static uint32_t _flushTimer;
+  static uint32_t _checkTimer;
+
+//Monitor SD Card (Inserted / Removed)
+  if (millis() > _checkTimer){
+    _checkTimer = millis() + CARD_CHECK_INTERVAL;
+    if (!cardInserted){  
+      if (card.begin()){ 
+        cardInserted = true;  //Check if SD card is inserted
+        card.chvol();
+        if (!card.exists("nul")) {
+          cardNullFile.open("nul", O_RDWR | O_CREAT | O_EXCL);  //Open a file for read/write, do not overwrite existing file
+          cardNullFile.close();
+        }
+        Serial.println("Inserted");
+      }
+    }
+    else if (!cardRecording){
+      if (!card.exists("nul")) cardInserted = 0;
+    }
+  }
+//Open and close cardDataFile
+  if (cardRecording && !_cardDataFileOpen){                                                 //Open cardDataFile
+    char cardDataFileName[13] = CARD_DATA_FILE_NAME "999.csv";                               //Faster to work backwards
+    const uint8_t BASE_NAME_SIZE = sizeof(CARD_DATA_FILE_NAME) - 1;
+    if (!card.exists(cardDataFileName)) {                                               //If xxxx999.csv exists, cannot open a cardDataFile anyways
+      for (byte i = 0; i < 3; i++){                                             //Start with first numeric char
+        while (!card.exists(cardDataFileName) && cardDataFileName[BASE_NAME_SIZE + i] != '0') cardDataFileName[BASE_NAME_SIZE + i]--;       //Decrement number until cardDataFile exists
+        if (card.exists(cardDataFileName) && cardDataFileName[BASE_NAME_SIZE + i] != '9') cardDataFileName[BASE_NAME_SIZE + i] ++;          //Go to next non-existant cardDataFilename
+      }
+      if(cardDataFile.open(cardDataFileName, O_RDWR | O_CREAT)){                                                                    //Open the cardDataFile
+        _cardDataFileOpen = true;
+//Write the cardDataFile header ##############################################################
+        cardDataFile.println(F(",ADXL345,,,ADXL377"));
+        cardDataFile.println(F("Time (ms), X, Y, Z, X, Y, Z")); 
+//End writing cardDataFile header ############################################################
+      }
+      else cardInserted = 0;
+    }
+    if (!_cardDataFileOpen) cardRecording = 0;          //Everyone should know 
+    _timer = millis();
+    _flushTimer = millis();
+  }
+  else if (!cardRecording && _cardDataFileOpen){
+    cardDataFile.close();
+    _cardDataFileOpen = 0;
+  }
+//Flush the cardDataFile on regular interval
+  #ifdef CARD_FLUSH_INTERVAL
+    if (millis() > _flushTimer){  
+      _flushTimer = millis() + CARD_FLUSH_INTERVAL;
+      if (cardRecording) cardDataFile.flush(); //This can take up to 32 millis, but typically 8 - 16 for an open cardDataFile and 13 on a newly opened cardDataFile (never flushed before)
+    }
+  #endif
+
+  if (cardRecording) {
+//Write data to cardDataFile ##############################################################
+    if (millis() > _timer){
+      _timer += 1;
+      cardDataFile.println(millis());
+    }
+//End writing data to cardDataFile ############################################################
+  }
+}
