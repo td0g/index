@@ -1,2 +1,9 @@
 Run comand prompt as admin
 setx /M PATH "C:\Path\you\want;%PATH%"
+
+  #Compress Video:
+ffmpeg -i "input.mov" -vf scale=720:1280 -vcodec libx264 -crf 20 "output.mp4"
+#Higher crf = smaller size (32 is pretty good)
+
+  #Trimming Video:
+ffmpeg -i "input.mov" -filter_complex "[0]trim=15:70,setpts=PTS-STARTPTS[a];[0]trim=135:226,setpts=PTS-STARTPTS[b];[a][b]concat[c];[c]scale=1280:720[d]" -map "[d]" -vcodec libx264 -crf 20 "output.mp4"
