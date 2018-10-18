@@ -11,3 +11,10 @@ ffmpeg -i "input.mov" -filter_complex "[0]trim=15:70,setpts=PTS-STARTPTS[a];[0]t
   #Photos to Video (Timelapse)
 ffmpeg -framerate 24 -i "C:\img%03d.jpg" "T:\Projects\2017-11-14 Debayer\over.mp4"
 all images named C:\img001.jpg, C:\img002.jpg, etc. will be used
+
+  #Adding Text to Video
+Use this tool: http://ffmpeg.shanewhite.co/
+Use lossless format for intermediate video:
+  Fast but large: ffmpeg -i input -c:v libx264 -crf 0 -preset ultrafast -c:a libmp3lame -b:a 320k output.mp4
+  Slow but 1/2 size: ffmpeg -i input -c:v libx264 -crf 0 -preset veryslow -c:a libmp3lame -b:a 320k output.mp4
+Also: CRF 17/18 is VISUALLY lossless
