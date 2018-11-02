@@ -17,6 +17,7 @@ all images named C:\img001.jpg, C:\img002.jpg, etc. will be used
 
   #Adding Text to Video
 Use this tool: http://ffmpeg.shanewhite.co/
+Example: drawtext="fontsize=64:fontfile='C\:\\Windows\\Fonts\\ADAM.CG PRO.otf':text='Linden'::fontcolor=ff0000:alpha='if(lt(t,0),0,if(lt(t,1),(t-0)/1,if(lt(t,3),1,if(lt(t,4),(1-(t-3))/1,0))))':x=64:y=64:shadowx=3:shadowy=6"
 Use lossless format for intermediate video:
   Fast but large: ffmpeg -i input -c:v libx264 -crf 0 -preset ultrafast -c:a libmp3lame -b:a 320k output.mp4
   Slow but 1/2 size: ffmpeg -i input -c:v libx264 -crf 0 -preset veryslow -c:a libmp3lame -b:a 320k output.mp4
