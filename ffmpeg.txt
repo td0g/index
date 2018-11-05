@@ -3,13 +3,19 @@ setx /M PATH "C:\Path\you\want;%PATH%"
 
   #Compress Video:
 ffmpeg -i "input.mov" -vf scale=720:1280 -vcodec libx264 -crf 20 "output.mp4"
-#Higher crf = smaller size (32 is pretty good)
+#Higher crf = smaller size (32 is pretty good, 18 is no visual degredation, 0 is lossless)
 
-#Side-byside overlay, individual start times edited,rotating exterior video
-ffmpeg -ss 11.5 -i "input0.MP4" -ss 8.6 -i "input1.MP4" -ss 4.5 -i "audio.wav" -filter_complex "[0:v]pad=2528:1080[int];[1:v]rotate=-PI/2[intb];[int][intb]overlay=1920:0[vid];[2:a]volume=32[aud]" -map [vid] -map [aud] -c:v libx264 -crf 23 -preset veryfast "output.MP4"
+  #Set start time & total time:
+ffmpeg -i "input.mov" -ss START_TIME_IN_SECONDS -t TOTAL_TIME_IN_SECONDS "output.mp4"
 
   #Trimming Video:
 ffmpeg -i "input.mov" -filter_complex "[0]trim=15:70,setpts=PTS-STARTPTS[a];[0]trim=135:226,setpts=PTS-STARTPTS[b];[a][b]concat[c];[c]scale=1280:720[d]" -map "[d]" -vcodec libx264 -crf 20 "output.mp4"
+
+  #Inject black at start & end; fade in and out (https://video.stackexchange.com/questions/20717/ffmpeg-add-3-seconds-of-black-to-video-head-and-tail   &   https://superuser.com/questions/778762/crossfade-between-2-videos-using-ffmpeg)
+ffmpeg -i "fullvideo.mp4" -filter_complex "[0:v]copy[mainVid];[0:v]trim=0:3,geq=0:128:128[blank];[blank][mainVid]concat[x];[x][blank]concat[y]" -map "[y] "output.mp4"
+
+  #Side-byside overlay, individual start times edited,rotating exterior video
+ffmpeg -ss 11.5 -i "input0.MP4" -ss 8.6 -i "input1.MP4" -ss 4.5 -i "audio.wav" -filter_complex "[0:v]pad=2528:1080[int];[1:v]rotate=-PI/2[intb];[int][intb]overlay=1920:0[vid];[2:a]volume=32[aud]" -map [vid] -map [aud] -c:v libx264 -crf 23 -preset veryfast "output.MP4"
 
   #Photos to Video (Timelapse)
 ffmpeg -framerate 24 -i "C:\img%03d.jpg" "T:\Projects\2017-11-14 Debayer\over.mp4"
