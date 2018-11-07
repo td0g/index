@@ -18,7 +18,10 @@ ffmpeg -i "input.mov" -filter_complex "[0]trim=15:70,setpts=PTS-STARTPTS[a];[0]t
 
   #Change Playback Rate
   ###   XXX = 1/playback rate (4 = 1/4 speed, 0.5 = 2 speed)
--vf "setpts=XXX*PTS"     
+-vf "setpts=XXX*PTS"
+  ###   Full command for making videos easy to review
+  ###   Make sure nullsrc rate is equal to input video rate divided by setpts factor (eg. 240 / 8 = 30)
+  ffmpeg -ss START_TIME -t TOTAL_TIME -i "INPUT" -filter_complex "nullsrc=size=1280x720:rate=30[base];[0:v]setpts=8*PTS[vid];[base][vid]overlay=shortest=1" -vcodec libx264 -crf 18 "O"
 
 
   #Inject black at start & end; fade in and out (https://video.stackexchange.com/questions/20717/ffmpeg-add-3-seconds-of-black-to-video-head-and-tail   &   https://superuser.com/questions/778762/crossfade-between-2-videos-using-ffmpeg)
