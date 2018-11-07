@@ -18,6 +18,7 @@ ffmpeg -i "input.mov" -filter_complex "[0]trim=15:70,setpts=PTS-STARTPTS[a];[0]t
 ffmpeg -i "fullvideo.mp4" -filter_complex "[0:v]copy[mainVid];[0:v]trim=0:3,geq=0:128:128[blank];[blank][mainVid]concat[x];[x][blank]concat[y]" -map "[y] "output.mp4"
 
   #Side-byside overlay, individual start times edited,rotating exterior video
+  ###  This does not work well for changing frame rates... Use the Four-Video Mosaic method below instead which uses nullsrc base
 ffmpeg -ss 11.5 -i "input0.MP4" -ss 8.6 -i "input1.MP4" -ss 4.5 -i "audio.wav" -filter_complex "[0:v]pad=2528:1080[int];[1:v]rotate=-PI/2[intb];[int][intb]overlay=1920:0[vid];[2:a]volume=32[aud]" -map [vid] -map [aud] -c:v libx264 -crf 23 -preset veryfast "output.MP4"
 
   #Four-Video Mosaic
