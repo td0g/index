@@ -1,0 +1,28 @@
+    'Catch incoming arguments (filenames dropped onto vbscript)
+If WScript.Arguments.Count > 0 Then
+		filePathAndName = replace(Wscript.Arguments(0), "\", "/")
+end if
+
+    'Execute shell command
+dim wSh
+Set wSh = WScript.CreateObject("WScript.Shell")
+wsh.run cmdString, 1, TRUE
+
+    'Read and Write from text file
+set iFile = fso.OpenTextFile(Arg)
+set oFile = fso.OpenTextFile(replace(Arg, ".","_e."))
+do until iFile.AtEndOfStream																		
+		newArg = iFile.ReadLine
+    oFile.writeLine(newArg)
+loop
+iFile.close
+oFile.close
+
+    'Look through files in current folder
+sFolder = Left(WScript.ScriptFullName, InStrRev(WScript.ScriptFullName, "\"))
+Set fso = CreateObject("Scripting.FileSystemObject")
+Set folder = fso.GetFolder(sFolder)
+Set files = folder.Files
+For each folderIdx In files
+  fileName = folderIdx.name
+next
