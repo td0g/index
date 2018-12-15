@@ -55,3 +55,8 @@ Use lossless format for intermediate video:
   Fast but large: ffmpeg -i input -c:v libx264 -crf 0 -preset ultrafast -c:a libmp3lame -b:a 320k output.mp4
   Slow but 1/2 size: ffmpeg -i input -c:v libx264 -crf 0 -preset veryslow -c:a libmp3lame -b:a 320k output.mp4
 Also: CRF 17/18 is VISUALLY lossless
+
+
+  #GIF
+ffmpeg -i "input.mov" -vf palettegen "palette.png"
+ffmpeg -i "input.mov" -i "pallette.png" -lavfi paletteuse -f gif "output.gif"
