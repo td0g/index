@@ -45,3 +45,27 @@ Set files = folder.Files
 For each folderIdx In files
   fileName = folderIdx.name
 next
+
+
+
+    'Is Excel file open already?
+'Is .csv file already open?  https://stackoverflow.com/questions/17549641/check-if-a-specific-excel-file-is-open-when-several-excel-files-are-open-and-act
+targetOpen = false
+On Error Resume Next
+Set xl = GetObject(, "Excel.Application")  'attach to running Excel instance
+If Err or Err.Number <> 429Then
+    Set wb = Nothing
+	For Each obj In xl.Workbooks
+	msgbox obj.Name
+	  If obj.Name = filePathAndName Then  'use obj.FullName for full path
+		Set wb = obj
+		Exit For
+	  End If
+	Next
+	If wb Is Nothing Then
+	  targetOpen = false
+	else
+		targetOpen = true
+	End If
+End If
+On Error Goto 0
