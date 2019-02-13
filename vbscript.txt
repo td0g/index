@@ -3,20 +3,39 @@ If WScript.Arguments.Count > 0 Then
 		filePathAndName = replace(Wscript.Arguments(0), "\", "/")
 end if
 
+
+
     'Execute shell command
 dim wSh
 Set wSh = WScript.CreateObject("WScript.Shell")
 wsh.run cmdString, 1, TRUE
 
+
+
+    'Execute macro from one Excel file on another Excel file
+Dim xlApp 
+Dim xlBook 
+Set xlApp = CreateObject("Excel.Application") 
+xlApp.Visible = true
+Set xlBook = xlApp.Workbooks.Open(targetFilePathAndName, 0, True) 
+xlApp.Run "'macroFilePathAndName'!macroName"
+xlApp.Quit 
+Set xlBook = Nothing 
+Set xlApp = Nothing 
+
+
+
     'Read and Write from text file
 set iFile = fso.OpenTextFile(Arg)
 set oFile = fso.OpenTextFile(replace(Arg, ".","_e."))
-do until iFile.AtEndOfStream																		
-		newArg = iFile.ReadLine
-    oFile.writeLine(newArg)
+do until iFile.AtEndOfStream	
+  newArg = iFile.ReadLine
+  oFile.writeLine(newArg)
 loop
 iFile.close
 oFile.close
+
+
 
     'Look through files in current folder
 sFolder = Left(WScript.ScriptFullName, InStrRev(WScript.ScriptFullName, "\"))
