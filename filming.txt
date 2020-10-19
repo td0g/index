@@ -1,6 +1,10 @@
 Tyler's Filming Guide
 
 
+  LUT
+    Look-Up Table
+
+
   Colour Space
     RGB / YUV conversions:
 FFMPEG can use BT.601 (SD), BT.709 (HD), BT.2020 (UHD) colour spaces
