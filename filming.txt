@@ -17,3 +17,22 @@ Detecting: ffprobe -loglevel error -show_entries stream=pix_fmt -of csv=p=0 inpu
 
     SUMMARY
 Use yuv420p
+
+  FFMPEG
+    To Learn:
+https://ffmpeg.org/ffmpeg-filters.html#amplify
+https://ffmpeg.org/ffmpeg-filters.html#cas
+https://ffmpeg.org/ffmpeg-filters.html#chromahold
+https://ffmpeg.org/ffmpeg-filters.html#chromakey
+https://ffmpeg.org/ffmpeg-filters.html#colorbalance
+https://ffmpeg.org/ffmpeg-filters.html#colormatrix
+https://ffmpeg.org/ffmpeg-filters.html#colorspace
+https://ffmpeg.org/ffmpeg-filters.html#curves-1
+https://ffmpeg.org/ffmpeg-filters.html#deshake
+https://ffmpeg.org/ffmpeg-filters.html#dilation
+https://ffmpeg.org/ffmpeg-filters.html#lensfun
+https://ffmpeg.org/ffmpeg-filters.html#pixscope
+https://ffmpeg.org/ffmpeg-filters.html#uspp
+https://ffmpeg.org/ffmpeg-filters.html#vibrance
+https://ffmpeg.org/ffmpeg-filters.html#toc-vignette-1
+
