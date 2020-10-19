@@ -1,0 +1,19 @@
+Tyler's Filming Guide
+
+
+  Colour Space
+    RGB / YUV conversions:
+FFMPEG can use BT.601 (SD), BT.709 (HD), BT.2020 (UHD) colour spaces
+Canon 7D records in 601 (!)
+https://forum.videohelp.com/threads/329866-incorrect-collor-display-in-video-playback#post2045830
+
+    Chroma Subsampling:
+https://trac.ffmpeg.org/wiki/Chroma%20Subsampling
+601 Colour Encoding System = YCbCr 4:2:2
+709 Colour Encoding System = YCbCr 4:2:0
+
+    Pixel Format
+Detecting: ffprobe -loglevel error -show_entries stream=pix_fmt -of csv=p=0 input.mp4
+
+    SUMMARY
+Use yuv420p
