@@ -18,6 +18,7 @@ https://trac.ffmpeg.org/wiki/Chroma%20Subsampling
 
     Pixel Format
 Detecting: ffprobe -loglevel error -show_entries stream=pix_fmt -of csv=p=0 input.mp4
+NOTE: iMovie does NOT support YUV444.  Make sure to include -pix_fmt yuv420p     https://apple.stackexchange.com/questions/166553/why-wont-video-from-ffmpeg-show-in-quicktime-imovie-or-quick-preview
 
     SUMMARY
 Use yuv420p
